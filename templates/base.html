@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock title %}</title>
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body>
+<div class="content">
+        <div>
+            <p>
+                <a href="/admin">Admin site</a>
+            </p>
+        </div>
+    {% block content %}{% endblock content %}
+</div>
+</body>
+</html>

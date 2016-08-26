@@ -5,7 +5,7 @@ from django.db import models
 
 STATUS = (
         ('new', 'New'),
-        ('active', 'Actice'),
+        ('active', 'Active'),
         ('reconciliation', 'Reconciliation'),
         ('closed', 'Closed'),
     )
@@ -14,6 +14,9 @@ STATUS = (
 class Company(models.Model):
     name = models.CharField(max_length=256, unique=True, null=False)
     country = CountryField()
+
+    def __unicode__(self):
+        return '{} {}'.format(self.name, self.country.alpha3)
 
 
 class Agreement(models.Model):
@@ -24,10 +27,16 @@ class Agreement(models.Model):
     export_amount = models.DecimalField(max_digits=15, default=0, decimal_places=2)
     import_amount = models.DecimalField(max_digits=15, default=0, decimal_places=2)
 
+    def __unicode__(self):
+        return '{} of {} from {}'.format(self.negotiator.username, self.company.name, str(self.start_date))
+
 
 class Period(models.Model):
     start_date = models.DateField(null=False)
     end_date = models.DateField(null=False)
-    agreement = models.ForeignKey(Agreement)
+    agreement = models.ForeignKey(Agreement, on_delete=models.CASCADE)
     status = models.CharField(choices=STATUS, max_length=15, default='new')
+
+    def __unicode__(self):
+        return '{} period of {} {}'.format(self.status, self.agreement, str(self.start_date))
 

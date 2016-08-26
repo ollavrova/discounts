@@ -13,9 +13,6 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ['name']
     ordering = ('-name', )
 
-    def search_country(self):
-        return
-
 
 class PeriodInline(admin.TabularInline):
     model = Period

@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django_countries.fields import CountryField
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 STATUS = (
         ('new', 'New'),
@@ -39,4 +41,18 @@ class Period(models.Model):
 
     def __unicode__(self):
         return '{} period of {} {}'.format(self.status, self.agreement, str(self.start_date))
+
+    def clean(self):
+        if self.start_date < self.agreement.start_date:
+            raise ValidationError(
+                _('Please input a valid start date, this one is not correct'),
+                params={'value': self.start_date},
+            )
+
+        if self.end_date > self.agreement.end_date:
+            raise ValidationError(
+                _('Please input a valid end date, this one is not correct'),
+                params={'value': self.end_date},
+            )
+
 
